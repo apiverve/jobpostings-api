@@ -1,0 +1,261 @@
+openapi: 3.0.4
+info:
+  title: Job Postings
+  description: >-
+    Job Postings is a jobs API that returns the open positions on a company's
+    public career board. Every job comes back in the same shape: title,
+    department, team, locations, remote and workplace type, employment type,
+    posting date and apply link. Filter by keyword, location, department,
+    employment type, posting date or remote. Paid plans add the full job
+    description and salary ranges where the company publishes them.
+  termsOfService: https://apiverve.com/terms/
+  contact:
+    name: APIVerve Support
+    email: hello@apiverve.com
+    url: https://apiverve.com/contact
+  version: 1.0.0
+externalDocs:
+  description: Learn more about APIVerve
+  url: https://docs.apiverve.com?utm_source=openapi
+servers:
+  - url: https://api.apiverve.com/
+paths:
+  /v1/jobpostings:
+    get:
+      summary: Job Postings
+      description: >-
+        Get the open jobs on a company's public job board, newest first, with
+        optional filters.
+      operationId: jobpostings
+      parameters:
+        - name: company
+          in: query
+          schema:
+            type: string
+          required: true
+          description: >-
+            The company's career board name, usually the company name in
+            lowercase, for example airbnb, stripe or palantir. Required unless
+            url is given.
+          example: airbnb
+        - name: keyword
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Return only jobs whose title, department or team contains every word
+            given, for example engineer or product designer.
+          example: engineer
+        - name: location
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Return only jobs with a location containing this text, for example
+            London, New York or Germany.
+          example: New York
+        - name: remote
+          in: query
+          schema:
+            type: boolean
+          required: false
+          description: >-
+            true returns only jobs open to remote work; false only jobs that are
+            not.
+          example: true
+        - name: department
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Return only jobs whose department or team contains this text, for
+            example Engineering or Sales.
+          example: Engineering
+        - name: employmentType
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Return only jobs of this employment type. Jobs whose board gives no
+            employment type are kept, since many boards leave it blank; only
+            jobs of another type are left out.
+          example: full-time
+        - name: postedSince
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Return only jobs first published at or after this date or date-time
+            (ISO 8601, for example 2026-10-01), or within this age: a number
+            followed by h, d or w, for example 12h, 7d or 2w. Jobs with no
+            posting date are left out when this is set.
+          example: 7d
+        - name: minSalary
+          in: query
+          schema:
+            type: number
+          required: false
+          description: >-
+            Return only jobs whose salary range reaches at least this amount, in
+            the job's own currency and pay period: the top of the range is
+            compared, or the bottom when no top is given. Jobs that publish no
+            salary are left out when this is set.
+          example: 100000
+        - name: page
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: >-
+            Page of results to return: 10 jobs per page on the free plan, 50 on
+            paid plans.
+          example: 1
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: status
+                  error:
+                    type: string
+                    description: error
+                  data:
+                    type: object
+                    description: data
+              example:
+                status: ok
+                error: null
+                data:
+                  company: Airbnb
+                  boardTotal: 174
+                  truncated: false
+                  total: 174
+                  page: 1
+                  pages: 4
+                  count: 2
+                  jobs:
+                    - id: '8299386'
+                      title: Office Manager, China
+                      department: People
+                      team: null
+                      location: Beijing, China
+                      locations:
+                        - Beijing, China
+                      remote: false
+                      workplaceType: onsite
+                      employmentType: null
+                      experienceLevel: null
+                      postedAt: '2026-10-19T01:34:11.000Z'
+                      updatedAt: '2026-10-19T01:34:11.000Z'
+                      url: https://careers.airbnb.com/positions/8299386?gh_jid=8299386
+                      applyUrl: https://careers.airbnb.com/positions/8299386?gh_jid=8299386
+                      summary: >-
+                        Airbnb was born in 2007 when two hosts welcomed three
+                        guests to their San Francisco home, and has since grown
+                        to over 5 million hosts who have welcomed over 2 billion
+                        guest arrivals in almost every country across the globe.
+                        Every day, hosts offer unique stays and experiences…
+                      description: >-
+                        Airbnb was born in 2007 when two hosts welcomed three
+                        guests to their San Francisco home, and has since grown
+                        to over 5 million hosts who have welcomed over 2 billion
+                        guest arrivals in almost every country across the globe.
+                        Every day, hosts offer unique stays and experiences that
+                        make it possible for guests to connect with communities
+                        in a more authentic way.
+
+
+                        Your Location:
+
+
+                        This position needs to be based in the Beijing, China
+                        office 5 days a week. No Visa/Relocation Support.
+
+
+                        The Community you will join:
+
+
+                        The Office Manager plays a critical role in delivering a
+                        seamless and welcoming office experience by coordinating
+                        daily office operations, supporting local leaders and
+                        employees, and…
+                      salary:
+                        min: null
+                        max: null
+                        currency: null
+                        interval: null
+                        summary: null
+                    - id: '8299396'
+                      title: Head of Homes Supply, Thailand & Vietnam
+                      department: Sales
+                      team: null
+                      location: Bangkok, Thailand
+                      locations:
+                        - Bangkok, Thailand
+                        - Bangkok, Bangkok Metropolis, Thailand
+                      remote: true
+                      workplaceType: remote
+                      employmentType: null
+                      experienceLevel: null
+                      postedAt: '2026-10-18T08:55:16.000Z'
+                      updatedAt: '2026-10-18T08:55:16.000Z'
+                      url: https://careers.airbnb.com/positions/8299396?gh_jid=8299396
+                      applyUrl: https://careers.airbnb.com/positions/8299396?gh_jid=8299396
+                      summary: >-
+                        Airbnb was born in 2007 when two hosts welcomed three
+                        guests to their San Francisco home, and has since grown
+                        to over 5 million hosts who have welcomed over 2 billion
+                        guest arrivals in almost every country across the globe.
+                        Every day, hosts offer unique stays and experiences…
+                      description: >-
+                        Airbnb was born in 2007 when two hosts welcomed three
+                        guests to their San Francisco home, and has since grown
+                        to over 5 million hosts who have welcomed over 2 billion
+                        guest arrivals in almost every country across the globe.
+                        Every day, hosts offer unique stays and experiences that
+                        make it possible for guests to connect with communities
+                        in a more authentic way.
+
+
+                        The Community You Will Join
+
+
+                        The Homes team grows Airbnb's destination business. We
+                        manage a competitive portfolio of accommodations that
+                        meets guest expectations for value, variety, and
+                        quality. We help all types of hosts grow their business
+                        through new products, partnerships, best practices, and
+                        innovation.
+
+
+                        The Difference You Will…
+                      salary:
+                        min: null
+                        max: null
+                        currency: null
+                        interval: null
+                        summary: null
+        '401':
+          description: Your request was not authorized, or your API Key was invalid
+        '404':
+          description: Requested resource was not found
+        '500':
+          description: A server error has occurred, try again later
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+security:
+  - api_key: []
